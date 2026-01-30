@@ -17,3 +17,36 @@ Each module section contains:
 
 ---
 
+## core
+
+**Trait implementations:**
+- `none`
+
+**Key signatures:**
+- ``pub fn new(id: u32`
+- `title: String) -> Self``
+- ``pub fn mark_done(&mut self)``
+
+## storage
+
+**Trait implementations:**
+- `none`
+
+**Key signatures:**
+- ``pub fn load_todos(path: &Path) -> Result<Vec<TodoItem>`
+- `AppError>``
+- ``pub fn save_todos(path: &Path`
+- `todos: &[TodoItem]) -> Result<()`
+- `AppError>``
+
+## cli
+
+**Trait implementations:**
+- `none`
+
+**Key signatures:**
+- ``pub fn parse() -> Cli`   `pub struct Cli { pub command: Command }`   `pub enum Command { Add { title: String }`
+- `Remove { id: u32 }`
+- `List`
+- `MarkDone { id: u32 } }``
+
