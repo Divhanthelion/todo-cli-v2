@@ -11,8 +11,33 @@ pub mod cli {
 }
 
 pub mod errors {
-    //! Centralised error type for the application.
-    todo!()
+    use std::io;
+    use serde_json;
+
+    /// Represents all possible errors that can occur in the application.
+    #[derive(Debug)]
+    pub enum AppError {
+        /// I/O related error
+        Io(io::Error),
+        /// JSON parsing / serialization error
+        Json(serde_json::Error),
+        /// Entity with the given id was not found
+        NotFound(u32),
+    }
+
+    /// Converts an `std::io::Error` into an `AppError`.
+    impl From<io::Error> for AppError {
+        fn from(err: io::Error) -> Self {
+            AppError::Io(err)
+        }
+    }
+
+    /// Converts a `serde_json::Error` into an `AppError`.
+    impl From<serde_json::Error> for AppError {
+        fn from(err: serde_json::Error) -> Self {
+            AppError::Json(err)
+        }
+    }
 }
 
 pub mod commands {
