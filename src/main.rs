@@ -61,8 +61,34 @@ pub mod commands {
 }
 
 pub mod storage {
-    //! Handles reading from and writing to the JSON persistence file.
-    todo!()
+    use std::fs;
+    use std::io;
+    use std::path::Path;
+
+    use crate::core::TodoItem;
+    use crate::errors::AppError;
+
+    /// Loads the todo list from a JSON file.
+    ///
+    /// # Errors
+    ///
+    /// Returns an `AppError::Io` if the file cannot be opened,
+    /// or an `AppError::Json` if the JSON is malformed.
+    pub fn load_todos(path: &Path) -> Result<Vec<TodoItem>, AppError> {
+        let file = fs::File::open(path).map_err(AppError::Io)?;
+        serde_json::from_reader(file).map_err(AppError::Json)
+    }
+
+    /// Saves the todo list to a JSON file.
+    ///
+    /// # Errors
+    ///
+    /// Returns an `AppError::Io` if the file cannot be created/written,
+    /// or an `AppError::Json` if serialization fails.
+    pub fn save_todos(path: &Path, todos: &[TodoItem]) -> Result<(), AppError> {
+        let file = fs::File::create(path).map_err(AppError::Io)?;
+        serde_json::to_writer_pretty(file, todos).map_err(AppError::Json)
+    }
 }
 
 pub mod main {
