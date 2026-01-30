@@ -121,8 +121,47 @@ pub mod errors {
 }
 
 pub mod commands {
-    //! Implements the business logic for each CLI command.
-    todo!()
+    use crate::core::{TodoItem};
+    use crate::errors::AppError;
+
+    /// Adds a new todo item to the list.
+    pub fn add_todo(todos: &mut Vec<TodoItem>, title: String) -> Result<(), AppError> {
+        // Determine the next id by taking the maximum existing id + 1
+        let next_id = todos.iter().map(|t| t.id).max().unwrap_or(0) + 1;
+        let item = TodoItem::new(next_id, title);
+        todos.push(item);
+        Ok(())
+    }
+
+    /// Removes a todo item by id.
+    pub fn remove_todo(todos: &mut Vec<TodoItem>, id: u32) -> Result<(), AppError> {
+        if let Some(pos) = todos.iter().position(|t| t.id == id) {
+            todos.remove(pos);
+            Ok(())
+        } else {
+            Err(AppError::NotFound(id))
+        }
+    }
+
+    /// Returns a formatted string of all todo items.
+    pub fn list_todos(todos: &[TodoItem]) -> String {
+        let mut lines = Vec::new();
+        for item in todos {
+            let status = if item.completed { "[x]" } else { "[ ]" };
+            lines.push(format!("{} {}: {}", status, item.id, item.title));
+        }
+        lines.join("\n")
+    }
+
+    /// Marks a todo item as completed.
+    pub fn mark_done(todos: &mut Vec<TodoItem>, id: u32) -> Result<(), AppError> {
+        if let Some(item) = todos.iter_mut().find(|t| t.id == id) {
+            item.mark_done();
+            Ok(())
+        } else {
+            Err(AppError::NotFound(id))
+        }
+    }
 }
 
 pub mod storage {
