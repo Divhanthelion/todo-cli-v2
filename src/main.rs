@@ -1,6 +1,8 @@
 //! A command‑line todo list application that supports adding, removing, listing and marking tasks as done. The CLI is parsed with `clap` and the todo list is persisted to a JSON file using `serde_json`.
 
 pub mod core {
+    use serde::{Serialize, Deserialize};
+    #[derive(Serialize, Deserialize)]
     pub struct TodoItem {
         pub id: u32,
         pub title: String,
@@ -163,7 +165,7 @@ pub mod commands {
 
 pub mod storage {
     use std::fs;
-    use std::io;
+    
     use std::path::Path;
 
     use crate::core::TodoItem;
