@@ -21,8 +21,73 @@ pub mod core {
 }
 
 pub mod cli {
-    //! Parses command‑line arguments into a strongly typed command structure.
-    todo!()
+    use std::env;
+
+    /// Top‑level CLI configuration.
+    pub struct Cli {
+        pub command: Command,
+    }
+
+    /// All supported CLI commands.
+    pub enum Command {
+        Add { title: String },
+        Remove { id: u32 },
+        List,
+        MarkDone { id: u32 },
+    }
+
+    /// Parses the current process arguments into a `Cli` instance.
+    pub fn parse() -> Cli {
+        // Skip the first argument (program name)
+        let mut args = env::args().skip(1);
+
+        match args.next() {
+            Some(cmd) => match cmd.as_str() {
+                "add" => {
+                    // Join all remaining arguments as the title
+                    let title = args.collect::<Vec<_>>().join(" ");
+                    if title.is_empty() {
+                        panic!("`add` command requires a title");
+                    }
+                    Cli {
+                        command: Command::Add { title },
+                    }
+                }
+                "remove" => {
+                    let id_str = args
+                        .next()
+                        .expect("`remove` command requires an ID argument");
+                    let id: u32 = id_str
+                        .parse()
+                        .expect("ID must be a valid unsigned integer");
+                    Cli {
+                        command: Command::Remove { id },
+                    }
+                }
+                "list" => Cli {
+                    command: Command::List,
+                },
+                "markdone" | "mark_done" => {
+                    let id_str = args
+                        .next()
+                        .expect("`markdone` command requires an ID argument");
+                    let id: u32 = id_str
+                        .parse()
+                        .expect("ID must be a valid unsigned integer");
+                    Cli {
+                        command: Command::MarkDone { id },
+                    }
+                }
+                _ => panic!("Unknown command: `{}`", cmd),
+            },
+            None => {
+                // Default to listing when no command is provided
+                Cli {
+                    command: Command::List,
+                }
+            }
+        }
+    }
 }
 
 pub mod errors {
