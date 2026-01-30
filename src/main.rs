@@ -196,8 +196,56 @@ pub mod storage {
 }
 
 pub mod main {
-    //! Entry point that wires together CLI parsing, command execution and persistence.
-    todo!()
+    use std::process;
+    use std::path::Path;
+
+    /// Entry point that wires together CLI parsing, command execution and persistence.
+    fn main() {
+        // Parse the command line arguments into a `Cli` struct
+        let cli = crate::cli::parse();
+
+        // Path to the JSON file that stores the todo list
+        let path = Path::new("todos.json");
+
+        // Load existing todos from disk (or start with an empty list on error)
+        let mut todos = match crate::storage::load_todos(path) {
+            Ok(t) => t,
+            Err(e) => {
+                eprintln!("Error loading todos: {}", e);
+                process::exit(1);
+            }
+        };
+
+        // Execute the requested command
+        let cmd_result = match cli.command {
+            crate::cli::Command::Add { title } => {
+                crate::commands::add_todo(&mut todos, title)
+            }
+            crate::cli::Command::Remove { id } => {
+                crate::commands::remove_todo(&mut todos, id)
+            }
+            crate::cli::Command::MarkDone { id } => {
+                crate::commands::mark_done(&mut todos, id)
+            }
+            crate::cli::Command::List => {
+                let output = crate::commands::list_todos(&todos);
+                println!("{}", output);
+                Ok(())
+            }
+        };
+
+        // If the command failed, report and exit
+        if let Err(e) = cmd_result {
+            eprintln!("Error: {}", e);
+            process::exit(1);
+        }
+
+        // Persist the updated todo list back to disk
+        if let Err(e) = crate::storage::save_todos(path, &todos) {
+            eprintln!("Error saving todos: {}", e);
+            process::exit(1);
+        }
+    }
 }
 
 fn main() {
