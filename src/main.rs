@@ -117,6 +117,17 @@ pub mod errors {
             AppError::Json(err)
         }
     }
+
+    /// Implements `std::fmt::Display` for `AppError` to provide user‑friendly error messages.
+    impl std::fmt::Display for AppError {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            match self {
+                AppError::Io(err) => write!(f, "IO error: {}", err),
+                AppError::Json(err) => write!(f, "JSON error: {}", err),
+                AppError::NotFound(id) => write!(f, "Item with id {} not found", id),
+            }
+        }
+    }
 }
 
 pub mod commands {
