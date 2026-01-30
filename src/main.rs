@@ -1,8 +1,23 @@
 //! A command‑line todo list application that supports adding, removing, listing and marking tasks as done. The CLI is parsed with `clap` and the todo list is persisted to a JSON file using `serde_json`.
 
 pub mod core {
-    //! Defines the fundamental data structures used by the application.
-    todo!()
+    pub struct TodoItem {
+        pub id: u32,
+        pub title: String,
+        pub completed: bool,
+    }
+
+    impl TodoItem {
+        /// Creates a new todo item with the given id and title.
+        pub fn new(id: u32, title: String) -> Self {
+            Self { id, title, completed: false }
+        }
+
+        /// Marks the todo item as completed.
+        pub fn mark_done(&mut self) {
+            self.completed = true;
+        }
+    }
 }
 
 pub mod cli {
