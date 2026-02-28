@@ -1,7 +1,56 @@
 [
   {
     "id": 1,
-    "title": "Buy milk",
-    "completed": false
+    "title": "Buy groceries",
+    "completed": true,
+    "priority": "High",
+    "created_at": "2026-02-27T23:22:26.832379-08:00",
+    "completed_at": "2026-02-27T23:22:36.431955-08:00",
+    "due_date": "2026-03-01",
+    "tags": [
+      "food",
+      "shopping"
+    ],
+    "category": "personal"
+  },
+  {
+    "id": 2,
+    "title": "Finish project",
+    "completed": true,
+    "priority": "Critical",
+    "created_at": "2026-02-27T23:22:26.838350-08:00",
+    "completed_at": "2026-02-27T23:22:36.436621-08:00",
+    "due_date": "2026-02-28",
+    "tags": [
+      "work",
+      "coding"
+    ],
+    "category": "work"
+  },
+  {
+    "id": 3,
+    "title": "Go to gym",
+    "completed": false,
+    "priority": "Critical",
+    "created_at": "2026-02-27T23:22:26.842900-08:00",
+    "completed_at": null,
+    "due_date": null,
+    "tags": [
+      "health"
+    ],
+    "category": "personal"
+  },
+  {
+    "id": 4,
+    "title": "Call mom",
+    "completed": false,
+    "priority": "Low",
+    "created_at": "2026-02-27T23:22:26.846915-08:00",
+    "completed_at": null,
+    "due_date": "2026-03-05",
+    "tags": [
+      "family"
+    ],
+    "category": null
   }
 ]
