@@ -1,3 +1,5 @@
+> **Archived.** Learning TUI; not under active development.
+
 # 🔥 BALLIN' TODO LIST - The Ultimate CLI Task Manager
 
 A hyper-charged command-line todo list application written in Rust. It takes the simplicity of a CLI todo list and completely supes it up with colors, tags, statistics, and a full undo/redo stack.
